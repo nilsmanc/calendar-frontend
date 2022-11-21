@@ -1,14 +1,16 @@
-import styles from './App.module.scss'
-import { createDate } from './utils/createDate'
-import { createMonth } from './utils/createMonth'
-import { createYear } from './utils/createYear'
+import { useState } from 'react'
 
-console.log('createDate', createDate({ locale: 'en-US' }))
-console.log('createMonth', createMonth({ locale: 'en-US' }).createMonthDays())
-console.log('createYear', createYear({ locale: 'en-US' }).createYearMonths())
+import { Calendar } from './components/Calendar'
+
+import styles from './App.module.scss'
 
 function App() {
-  return <div className={styles.wrapper}>Calendar</div>
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  return (
+    <div className={styles.wrapper}>
+      <Calendar selectDate={setSelectedDate} selectedDate={selectedDate} />
+    </div>
+  )
 }
 
 export default App
