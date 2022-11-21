@@ -25,14 +25,14 @@ export const useCalendar = ({
   selectedDate: date,
 }: UseCalendarParams) => {
   const [mode, setMode] = useState<'days' | 'months' | 'years'>('days')
-  const [selectedDate, setSelectedDate] = useState(createDate({ date }))
+  const [selectedDay, setSelectedDay] = useState(createDate({ date }))
   const [selectedMonth, setSelectedMonth] = useState(
-    createMonth({ date: new Date(selectedDate.year, selectedDate.monthIndex), locale }),
+    createMonth({ date: new Date(selectedDay.year, selectedDay.monthIndex), locale }),
   )
 
-  const [selectedYear, setSelectedYear] = useState(selectedDate.year)
+  const [selectedYear, setSelectedYear] = useState(selectedDay.year)
   const [selectedYearInterval, setSelectedYearInterval] = useState(
-    getYearsInterval(selectedDate.year),
+    getYearsInterval(selectedDay.year),
   )
 
   const monthNames = useMemo(() => getMonthNames(locale), [])
@@ -41,7 +41,7 @@ export const useCalendar = ({
   const days = useMemo(() => selectedMonth.createMonthDays(), [selectedMonth, selectedYear])
 
   const calendarDays = useMemo(() => {
-    const monthNumberOfDays = getMonthNumberOfDays(selectedDate.monthIndex, selectedYear)
+    const monthNumberOfDays = getMonthNumberOfDays(selectedDay.monthIndex, selectedYear)
 
     const prevMonthDays = createMonth({
       date: new Date(selectedYear, selectedMonth.monthIndex - 1),
@@ -94,13 +94,14 @@ export const useCalendar = ({
       calendarDays,
       weekDayNames,
       monthNames,
-      selectedDate,
+      selectedDay,
       selectedMonth,
       selectedYear,
       selectedYearInterval,
     },
     functions: {
       setMode,
+      setSelectedDay,
     },
   }
 }

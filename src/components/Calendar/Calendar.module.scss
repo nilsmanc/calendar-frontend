@@ -1,5 +1,5 @@
 .calendar {
-  width: 500px;
+  width: 700px;
   border-radius: 5px;
   text-transform: capitalize;
   background-color: beige;
@@ -7,6 +7,7 @@
 
 .header {
   position: relative;
+  font-size: 20px;
   border-radius: 5px 5px 0 0;
   background-color: beige;
   color: white;
@@ -28,4 +29,63 @@
   font-size: 24px;
   color: black;
   cursor: pointer;
+}
+
+.body {
+  border-radius: 0 0 5px 5px;
+  padding: 5px;
+}
+
+.weekNames {
+  height: 20px;
+  font-weight: 600;
+  font-size: 20px;
+  color: black;
+  text-align: center;
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px 1px;
+  margin-bottom: 20px;
+}
+
+.days {
+  font-size: 20px;
+  font-weight: 400;
+  color: black;
+  text-align: center;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr;
+  gap: 1px 1px;
+}
+
+.day {
+  border-radius: 5px;
+  padding: 5px 0;
+  cursor: pointer;
+  &:hover {
+    background-color: bisque;
+  }
+}
+
+.additionalDay {
+  padding: 5px;
+  font-weight: 300;
+  cursor: pointer;
+  color: gray;
+}
+
+.today {
+  font-weight: bold;
+  color: rgb(110, 110, 72);
+  cursor: pointer;
+}
+
+.selected {
+  color: black;
+  background-color: rgb(221, 219, 194);
+  padding: 5px 0;
+  border-radius: 5px;
 }
