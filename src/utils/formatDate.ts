@@ -1,5 +1,5 @@
 import { createDate } from './createDate'
-export const formateDate = (date: Date, format: string) => {
+export const formatDate = (date: Date, format: string) => {
   const d = createDate({ date })
 
   return format
