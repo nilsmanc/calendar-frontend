@@ -41,7 +41,7 @@ export const useCalendar = ({
   const days = useMemo(() => selectedMonth.createMonthDays(), [selectedMonth, selectedYear])
 
   const calendarDays = useMemo(() => {
-    const monthNumberOfDays = getMonthNumberOfDays(selectedDay.monthIndex, selectedYear)
+    const monthNumberOfDays = getMonthNumberOfDays(selectedMonth.monthIndex, selectedYear)
 
     const prevMonthDays = createMonth({
       date: new Date(selectedYear, selectedMonth.monthIndex - 1),
@@ -88,6 +88,30 @@ export const useCalendar = ({
     return result
   }, [selectedMonth.year, selectedMonth.monthIndex, selectedYear])
 
+  const onClickArrow = (direction: 'right' | 'left') => {
+    if (mode === 'days') {
+      const monthIndex =
+        direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1
+
+      if (monthIndex === -1) {
+        const year = selectedYear - 1
+        setSelectedYear(year)
+        if (!selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+
+        return setSelectedMonth(createMonth({ date: new Date(year, 11), locale }))
+      }
+
+      if (monthIndex === 12) {
+        const year = selectedYear + 1
+        setSelectedYear(year)
+        if (!selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+
+        return setSelectedMonth(createMonth({ date: new Date(year, 0), locale }))
+      }
+      return setSelectedMonth(createMonth({ date: new Date(selectedYear, monthIndex), locale }))
+    }
+  }
+
   return {
     state: {
       mode,
@@ -102,6 +126,7 @@ export const useCalendar = ({
     functions: {
       setMode,
       setSelectedDay,
+      onClickArrow,
     },
   }
 }

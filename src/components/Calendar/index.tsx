@@ -21,7 +21,9 @@ export const Calendar: React.FC<CalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.header}>
-        <div className={styles.arrowLeft}> {'<'} </div>
+        <div className={styles.arrowLeft} onClick={() => functions.onClickArrow('left')}>
+          {'<'}
+        </div>
         {state.mode === 'days' && (
           <div onClick={() => functions.setMode('months')}>
             {state.monthNames[state.selectedMonth.monthIndex].month} {state.selectedYear}
@@ -36,7 +38,9 @@ export const Calendar: React.FC<CalendarProps> = ({
             {state.selectedYearInterval[state.selectedYearInterval.length - 1]}
           </div>
         )}
-        <div className={styles.arrowRight}> {'>'} </div>
+        <div className={styles.arrowRight} onClick={() => functions.onClickArrow('right')}>
+          {'>'}
+        </div>
       </div>
       <div className={styles.body}>
         {state.mode === 'days' && (
