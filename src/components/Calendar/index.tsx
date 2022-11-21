@@ -13,6 +13,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   selectDate,
   selectedDate,
 }) => {
-  const {} = useCalendar({ firstWeekDay, locale, selectedDate })
+  const { state } = useCalendar({ firstWeekDay, locale, selectedDate })
+  console.log('state', state)
   return <div>Calendar</div>
 }
