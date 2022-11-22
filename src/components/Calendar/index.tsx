@@ -7,16 +7,16 @@ interface CalendarProps {
   locale?: string
   selectedDate: Date
   selectDate: (date: Date) => void
-  firstWeekDay?: number
+  firstWeekDayNumber?: number
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
   locale = 'default',
-  firstWeekDay = 2,
+  firstWeekDayNumber = 2,
   selectDate,
   selectedDate,
 }) => {
-  const { state, functions } = useCalendar({ firstWeekDay, locale, selectedDate })
+  const { state, functions } = useCalendar({ firstWeekDayNumber, locale, selectedDate })
 
   return (
     <div className={styles.calendar}>
@@ -78,6 +78,64 @@ export const Calendar: React.FC<CalendarProps> = ({
               })}
             </div>
           </>
+        )}
+        {state.mode === 'months' && (
+          <div className={styles.pickContainer}>
+            {state.monthNames.map((monthName) => {
+              const isCurrentMonth =
+                new Date().getMonth() === monthName.monthIndex &&
+                new Date().getFullYear() === state.selectedYear
+              const isSelectedMonth = monthName.monthIndex === state.selectedMonth.monthIndex
+
+              return (
+                <div
+                  key={monthName.month}
+                  onClick={() => {
+                    functions.setSelectedMonthByIndex(monthName.monthIndex)
+                    functions.setMode('days')
+                  }}
+                  className={
+                    isCurrentMonth
+                      ? styles.today
+                      : '' || isSelectedMonth
+                      ? styles.selected
+                      : '' || styles.pick
+                  }>
+                  {monthName.monthShort}
+                </div>
+              )
+            })}
+          </div>
+        )}
+        {state.mode === 'years' && (
+          <div className={styles.pickContainer}>
+            <div className={styles.unchoosableYear}>{state.selectedYearInterval[0] - 1}</div>
+            {state.selectedYearInterval.map((year) => {
+              const isCurrentYear = new Date().getFullYear() === year
+              const isSelectedYear = year === state.selectedYear
+
+              return (
+                <div
+                  key={year}
+                  onClick={() => {
+                    functions.setSelectedYear(year)
+                    functions.setMode('months')
+                  }}
+                  className={
+                    isCurrentYear
+                      ? styles.today
+                      : '' || isSelectedYear
+                      ? styles.selected
+                      : '' || styles.pick
+                  }>
+                  {year}
+                </div>
+              )
+            })}
+            <div className={styles.unchoosableYear}>
+              {state.selectedYearInterval[state.selectedYearInterval.length - 1] + 1}
+            </div>
+          </div>
         )}
       </div>
     </div>

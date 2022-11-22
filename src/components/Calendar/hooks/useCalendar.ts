@@ -11,8 +11,10 @@ import {
 interface UseCalendarParams {
   locale?: string
   selectedDate: Date
-  firstWeekDay: number
+  firstWeekDayNumber: number
 }
+
+const DAYS_IN_WEEK = 7
 
 const getYearsInterval = (year: number) => {
   const startYear = Math.floor(year / 10) * 10
@@ -20,7 +22,7 @@ const getYearsInterval = (year: number) => {
 }
 
 export const useCalendar = ({
-  firstWeekDay = 2,
+  firstWeekDayNumber = 2,
   locale = 'default',
   selectedDate: date,
 }: UseCalendarParams) => {
@@ -36,7 +38,7 @@ export const useCalendar = ({
   )
 
   const monthNames = useMemo(() => getMonthNames(locale), [])
-  const weekDayNames = useMemo(() => getWeekDayNames(firstWeekDay, locale), [])
+  const weekDayNames = useMemo(() => getWeekDayNames(firstWeekDayNumber, locale), [])
 
   const days = useMemo(() => selectedMonth.createMonthDays(), [selectedMonth, selectedYear])
 
@@ -56,17 +58,17 @@ export const useCalendar = ({
     const firstDay = days[0]
     const lastDay = days[monthNumberOfDays - 1]
 
-    const shiftIndex = firstWeekDay - 1
+    const shiftIndex = firstWeekDayNumber - 1
 
     const numberOfPrevDays =
       firstDay.dayNumberInWeek - 1 - shiftIndex < 0
-        ? 7 - (firstWeekDay - firstDay.dayNumberInWeek)
+        ? DAYS_IN_WEEK - (firstWeekDayNumber - firstDay.dayNumberInWeek)
         : firstDay.dayNumberInWeek - 1 - shiftIndex
 
     const numberOfNextDays =
-      7 - lastDay.dayNumberInWeek + shiftIndex > 6
-        ? 7 - lastDay.dayNumberInWeek - (7 - shiftIndex)
-        : 7 - lastDay.dayNumberInWeek + shiftIndex
+      DAYS_IN_WEEK - lastDay.dayNumberInWeek + shiftIndex > 6
+        ? DAYS_IN_WEEK - lastDay.dayNumberInWeek - (DAYS_IN_WEEK - shiftIndex)
+        : DAYS_IN_WEEK - lastDay.dayNumberInWeek + shiftIndex
 
     const totalCalendarDays = days.length + numberOfNextDays + numberOfPrevDays
 
@@ -89,6 +91,28 @@ export const useCalendar = ({
   }, [selectedMonth.year, selectedMonth.monthIndex, selectedYear])
 
   const onClickArrow = (direction: 'right' | 'left') => {
+    if (mode === 'years' && direction === 'left') {
+      return setSelectedYearInterval(getYearsInterval(selectedYearInterval[0] - 10))
+    }
+
+    if (mode === 'years' && direction === 'right') {
+      return setSelectedYearInterval(getYearsInterval(selectedYearInterval[0] + 10))
+    }
+
+    if (mode === 'months' && direction === 'left') {
+      const year = selectedYear - 1
+      if (!selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+
+      return setSelectedYear(selectedYear - 1)
+    }
+
+    if (mode === 'months' && direction === 'right') {
+      const year = selectedYear + 1
+      if (!selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+
+      return setSelectedYear(selectedYear + 1)
+    }
+
     if (mode === 'days') {
       const monthIndex =
         direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1
@@ -98,7 +122,7 @@ export const useCalendar = ({
         setSelectedYear(year)
         if (!selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
 
-        return setSelectedMonth(createMonth({ date: new Date(year, 11), locale }))
+        return setSelectedMonth(createMonth({ date: new Date(selectedYear - 1, 11), locale }))
       }
 
       if (monthIndex === 12) {
@@ -108,8 +132,12 @@ export const useCalendar = ({
 
         return setSelectedMonth(createMonth({ date: new Date(year, 0), locale }))
       }
-      return setSelectedMonth(createMonth({ date: new Date(selectedYear, monthIndex), locale }))
+      setSelectedMonth(createMonth({ date: new Date(selectedYear, monthIndex), locale }))
     }
+  }
+
+  const setSelectedMonthByIndex = (monthIndex: number) => {
+    setSelectedMonth(createMonth({ date: new Date(selectedYear, monthIndex), locale }))
   }
 
   return {
@@ -127,6 +155,9 @@ export const useCalendar = ({
       setMode,
       setSelectedDay,
       onClickArrow,
+      setSelectedMonthByIndex,
+      setSelectedYear,
+      setSelectedYearInterval,
     },
   }
 }

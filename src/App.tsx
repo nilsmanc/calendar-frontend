@@ -7,6 +7,7 @@ import styles from './App.module.scss'
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(new Date())
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.date}>{formatDate(selectedDate, 'DD MM YYYY')}</div>
