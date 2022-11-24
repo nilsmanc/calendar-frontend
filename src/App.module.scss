@@ -1,17 +1,21 @@
 .wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-areas:
+    'p c t'
+    'p c t'
+    'p a t';
+  grid-template-columns: 300px 1fr 300px;
+  grid-template-rows: 200px 400px 300px;
+  padding: 50px;
 }
 
 .calendar {
+  grid-area: c;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: white;
   height: 100vh;
-  margin-inline: auto;
 }
 
 .date {
@@ -21,4 +25,16 @@
   border-radius: 15px;
   padding: 10px 15px;
   margin-bottom: 20px;
+}
+
+.profileList {
+  grid-area: p;
+}
+
+.todoList {
+  grid-area: t;
+}
+
+.addTodo {
+  grid-area: a;
 }

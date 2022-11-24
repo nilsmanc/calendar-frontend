@@ -30,13 +30,19 @@ export const ProfileList: React.FC<ProfileListProps> = ({ setProfileId }) => {
   }, [])
 
   return (
-    <div>
+    <div className={styles.wrapper}>
+      <b>Выберите профиль</b>
+      <hr />
       {profiles.map((profile) => (
         <div className={styles.profile} onClick={() => setProfileId(profile._id)} key={profile._id}>
           {profile.name}
         </div>
       ))}
-      <textarea value={name} onChange={(e) => setName(e.target.value)} />
+      <textarea
+        className={styles.textarea}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <button onClick={addProfileHandler}>Добавить профиль</button>
     </div>
   )

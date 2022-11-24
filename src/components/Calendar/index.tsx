@@ -1,13 +1,17 @@
+import { useState, useEffect } from 'react'
 import { useCalendar } from './hooks/useCalendar'
-import { checkDateIsEqual, checkIsToday } from '../../utils'
+import { checkDateIsEqual, checkIsToday, formatDate } from '../../utils'
 
 import styles from './Calendar.module.scss'
+import instance from '../../axios'
+import { TodoType } from '../../types'
 
 interface CalendarProps {
   locale?: string
   selectedDate: Date
   selectDate: (date: Date) => void
   firstWeekDayNumber?: number
+  todos: TodoType[]
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -15,6 +19,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   firstWeekDayNumber = 2,
   selectDate,
   selectedDate,
+  todos,
 }) => {
   const { state, functions } = useCalendar({ firstWeekDayNumber, locale, selectedDate })
 
@@ -55,25 +60,33 @@ export const Calendar: React.FC<CalendarProps> = ({
                 const isToday = checkIsToday(day.date)
                 const isSelectedDay = checkDateIsEqual(day.date, state.selectedDay.date)
                 const isAdditionalDay = day.monthIndex !== state.selectedMonth.monthIndex
+                const filteredTodos = todos.filter(
+                  (todo) => todo.date === formatDate(day.date, 'DD MM YYYY'),
+                )
 
                 return (
-                  <div
-                    key={`${day.dayNumber}-${day.monthIndex}`}
-                    onClick={() => {
-                      functions.setSelectedDay(day)
-                      selectDate(day.date)
-                    }}
-                    className={
-                      isToday
-                        ? styles.today
-                        : '' || isSelectedDay
-                        ? styles.selected
-                        : '' || isAdditionalDay
-                        ? styles.additionalDay
-                        : '' || styles.day
-                    }>
-                    {day.dayNumber}
-                  </div>
+                  <>
+                    <div
+                      key={`${day.dayNumber}-${day.monthIndex}`}
+                      onClick={() => {
+                        functions.setSelectedDay(day)
+                        selectDate(day.date)
+                      }}
+                      className={
+                        isToday
+                          ? styles.today
+                          : '' || isSelectedDay
+                          ? styles.selected
+                          : '' || isAdditionalDay
+                          ? styles.additionalDay
+                          : '' || styles.day
+                      }>
+                      {day.dayNumber}
+                      {filteredTodos.length !== 0 && (
+                        <span className={styles.todosCount}>{filteredTodos.length}</span>
+                      )}
+                    </div>
+                  </>
                 )
               })}
             </div>
