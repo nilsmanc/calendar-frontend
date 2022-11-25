@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react'
 import { useCalendar } from './hooks/useCalendar'
 import { checkDateIsEqual, checkIsToday, formatDate } from '../../utils'
+import { TodoType } from '../../types'
 
 import styles from './Calendar.module.scss'
-import instance from '../../axios'
-import { TodoType } from '../../types'
 
 interface CalendarProps {
   locale?: string
@@ -73,12 +71,12 @@ export const Calendar: React.FC<CalendarProps> = ({
                         selectDate(day.date)
                       }}
                       className={
-                        isToday
-                          ? styles.today
+                        isAdditionalDay
+                          ? styles.additionalDay
                           : '' || isSelectedDay
                           ? styles.selected
-                          : '' || isAdditionalDay
-                          ? styles.additionalDay
+                          : '' || isToday
+                          ? styles.today
                           : '' || styles.day
                       }>
                       {day.dayNumber}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+
 import instance from '../../axios'
 import { TodoType } from '../../types'
 
@@ -9,9 +10,16 @@ type AddTodoListProps = {
   selectedDate: Date
   editId: string
   setEditId: (id: string) => void
+  isUpdated: boolean
+  setIsUpdated: (boolean: boolean) => void
 }
 
-export const EditTodo: React.FC<AddTodoListProps> = ({ editId, setEditId }) => {
+export const EditTodo: React.FC<AddTodoListProps> = ({
+  editId,
+  setEditId,
+  isUpdated,
+  setIsUpdated,
+}) => {
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [editTodo, setEditTodo] = useState({} as TodoType)
@@ -26,7 +34,8 @@ export const EditTodo: React.FC<AddTodoListProps> = ({ editId, setEditId }) => {
     fetchTodo(editId)
     setTitle(editTodo.title)
     setDescription(editTodo.description)
-  }, [editId, editTodo.title, editTodo.description])
+    setDone(editTodo.done)
+  }, [editId, editTodo.title, editTodo.description, editTodo.done])
 
   const updateTodoHandler = async () => {
     const todo = {
@@ -38,6 +47,7 @@ export const EditTodo: React.FC<AddTodoListProps> = ({ editId, setEditId }) => {
     await instance.patch(`/todos/${editId}`, todo)
 
     setEditId('')
+    setIsUpdated(!isUpdated)
   }
 
   return (
@@ -55,11 +65,17 @@ export const EditTodo: React.FC<AddTodoListProps> = ({ editId, setEditId }) => {
           className={styles.textarea}
           placeholder='Описание'
         />
-        <input type='checkbox' checked={editTodo.done} onClick={() => setDone(!done)} />
+        <div className={styles.done}>
+          Выполнено
+          <input type='checkbox' checked={done} onClick={() => setDone(!done)} />
+        </div>
 
-        <button onClick={updateTodoHandler}>Обновить заметку</button>
+        <button className={styles.button} onClick={updateTodoHandler}>
+          Обновить заметку
+        </button>
       </>
       <button
+        className={styles.button}
         onClick={() => {
           setEditId('')
         }}>

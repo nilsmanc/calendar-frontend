@@ -1,10 +1,38 @@
 .wrapper {
+  display: flex;
+  justify-content: space-between;
   background-color: beige;
   border-radius: 5px;
   padding: 50px;
+  box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+  }
 }
 
 .textarea {
   resize: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.button {
+  border: none;
+  background-color: beige;
+  padding-left: 0;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+::-webkit-file-upload-button {
+  background: beige;
+  border: none;
+  padding-top: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
