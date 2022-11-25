@@ -25,6 +25,8 @@ export const AddTodo: React.FC<AddTodoListProps> = ({
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
 
+  const fileInput = document.getElementById('fileUpload') as HTMLInputElement
+
   const handleChangeFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const formData = new FormData()
@@ -52,6 +54,7 @@ export const AddTodo: React.FC<AddTodoListProps> = ({
     setTitle('')
     setDescription('')
     setIsUpdated(!isUpdated)
+    fileInput.value = ''
   }
 
   return (
@@ -68,7 +71,7 @@ export const AddTodo: React.FC<AddTodoListProps> = ({
         className={styles.textarea}
         placeholder='Описание'
       />
-      <input type='file' onChange={handleChangeFile} />
+      <input id='fileUpload' type='file' onChange={handleChangeFile} />
       <button className={styles.button} disabled={!profileId} onClick={addTodoHandler}>
         Добавить заметку
       </button>
