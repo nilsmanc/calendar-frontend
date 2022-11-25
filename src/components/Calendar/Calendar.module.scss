@@ -24,6 +24,14 @@
   color: black;
 }
 
+.mode {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .arrowLeft {
   font-size: 24px;
   color: black;

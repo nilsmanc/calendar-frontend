@@ -28,15 +28,17 @@ export const Calendar: React.FC<CalendarProps> = ({
           {'<'}
         </div>
         {state.mode === 'days' && (
-          <div onClick={() => functions.setMode('months')}>
+          <div className={styles.mode} onClick={() => functions.setMode('months')}>
             {state.monthNames[state.selectedMonth.monthIndex].month} {state.selectedYear}
           </div>
         )}
         {state.mode === 'months' && (
-          <div onClick={() => functions.setMode('years')}>{state.selectedYear}</div>
+          <div className={styles.mode} onClick={() => functions.setMode('years')}>
+            {state.selectedYear}
+          </div>
         )}
         {state.mode === 'years' && (
-          <div onClick={() => functions.setMode('days')}>
+          <div className={styles.mode} onClick={() => functions.setMode('days')}>
             {state.selectedYearInterval[0]} -{' '}
             {state.selectedYearInterval[state.selectedYearInterval.length - 1]}
           </div>

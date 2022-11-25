@@ -31,7 +31,7 @@ export const AddTodo: React.FC<AddTodoListProps> = ({
       const file = event.target.files![0]
       formData.append('file', file)
       const { data } = await instance.post('/upload', formData)
-      setFileUrl('http://localhost:4444' + data.url)
+      setFileUrl(process.env.REACT_APP_API_URL + data.url)
     } catch (err) {
       console.warn(err)
       alert('Failed to upload file')
